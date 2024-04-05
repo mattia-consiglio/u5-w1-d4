@@ -1,5 +1,9 @@
 package mattiaconsiglio.u5w1d4.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +13,16 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@Entity
+
 public class Pizza extends Food {
+
+    @ManyToMany
+    @JoinTable(
+            name = "pizza_topping",
+            joinColumns = @JoinColumn(name = "pizza_id"),
+            inverseJoinColumns = @JoinColumn(name = "topping_id")
+    )
     private List<Topping> toppings = new ArrayList<>();
 
     public Pizza(String name, List<Topping> basicToppings) {
