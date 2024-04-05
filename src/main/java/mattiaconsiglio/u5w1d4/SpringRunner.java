@@ -1,6 +1,7 @@
 package mattiaconsiglio.u5w1d4;
 
 
+import mattiaconsiglio.u5w1d4.dao.FoodService;
 import mattiaconsiglio.u5w1d4.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,12 +19,37 @@ public class SpringRunner implements CommandLineRunner {
     @Autowired
     private List<Pizza> pizzas;
 
-    private List<Order> orders = new ArrayList<>();
+    @Autowired
+    private FoodService foodService;
+
+    private final List<Order> orders = new ArrayList<>();
+
+    public SpringRunner(List<Table> tables, List<Pizza> pizzas) {
+        this.tables = tables;
+        this.pizzas = pizzas;
+    }
 
     @Override
     public void run(String... args) throws Exception {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(U5W1D4Application.class);
         Menu menu = ctx.getBean(Menu.class);
+
+        // add foods to db
+        Topping tomato = (Topping) foodService.save((Topping) ctx.getBean("tomato"));
+        Topping cheese = (Topping) foodService.save((Topping) ctx.getBean("cheese"));
+        Topping ham = (Topping) foodService.save((Topping) ctx.getBean("ham"));
+        Topping onion = (Topping) foodService.save((Topping) ctx.getBean("onion"));
+        Topping pineapple = (Topping) foodService.save((Topping) ctx.getBean("pineapple"));
+        Topping salami = (Topping) foodService.save((Topping) ctx.getBean("salami"));
+
+
+        Pizza pizza1 = new Pizza("Margherita", List.of(tomato, cheese));
+        Pizza pizza2 = new Pizza("Pepperoni", List.of(tomato, cheese), List.of(onion, salami));
+        Pizza pizza3 = new Pizza("Hawaiian", List.of(tomato, cheese), List.of(ham, pineapple));
+
+        foodService.save(pizza1);
+        foodService.save(pizza2);
+        foodService.save(pizza3);
 
 
         menu.displayMenu();
@@ -43,7 +69,6 @@ public class SpringRunner implements CommandLineRunner {
         for (Order order : orders) {
             System.out.println(order);
         }
-
 
         ctx.close();
 

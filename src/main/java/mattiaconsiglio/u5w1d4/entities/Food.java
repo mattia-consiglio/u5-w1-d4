@@ -1,22 +1,27 @@
 package mattiaconsiglio.u5w1d4.entities;
 
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
 
 @Getter
 @Setter
-@ToString
+//@ToString
 @NoArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "foods")
 public abstract class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Setter(AccessLevel.NONE)
-    protected UUID uid;
+    protected UUID uuid;
     protected String name;
     protected int calories;
     protected double price;

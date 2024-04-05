@@ -19,7 +19,7 @@ public class BeansConfig {
         return seatCost;
     }
 
-    @Bean
+    @Bean(name = "cheese")
     public Topping cheese() {
         return new Topping("Cheese", 92, 0.69);
     }
